@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var userController = require("./controller/userController");
+var {verifyToken} = require("../../middleware/authorization");
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
@@ -17,5 +18,5 @@ router.post("/login", userController.login);
 
 router.post("/register", userController.register);
 
-router.post('/delete-user', userController.deleteUser)
+router.post('/delete-user', verifyToken, userController.deleteUser)
 module.exports = router;

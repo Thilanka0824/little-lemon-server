@@ -4,6 +4,7 @@ const {
   createUser,
   hashPassword,
   comparePassword,
+  createJWTToken
 } = require("./userHelper");
 
 module.exports = {
@@ -47,10 +48,12 @@ module.exports = {
           message: "USER DOES NOT EXIST!",
         };
       }
-      //throw an error if the password is incorrect
+
+
+      //throw an error if the password from the request body in the front-end does not match the password from the database
       let checkedPassword = await comparePassword(
         req.body.password,
-        foundUser.password
+        foundUser.password,
       );
       if (!checkedPassword) {
         throw {
@@ -59,11 +62,15 @@ module.exports = {
         };
       }
 
+      //jwt
+      let token = await createJWTToken(foundUser)
+
       console.log("foundUser", foundUser);
 
       res.status(200).json({
         message: "Post request from the Controller",
         userOBJ: foundUser,
+        token: token,
       });
     } catch (error) {
       let errorMessage = await errorHandler(error);
@@ -73,9 +80,21 @@ module.exports = {
 
   deleteUser: async (req, res) => {
     try {
-      res.status(200).json({
-        message: "Delete request from the Controller",
-      });
+      // console.log(req.headers.authorization);
+      console.log(req.token);
+      let deletedUser = await User.deleteOne(req.body);
+      console.log(deletedUser);
+
+      if (deletedUser.deletedCount > 0) {
+        res.status(200).json({
+          message: "User deleted successfully",
+        });
+      } else {
+        throw {
+          status: 404,
+          message: "USER DOES NOT EXIST!",
+        };
+      }
     } catch (error) {
       let errorMessage = await errorHandler(error);
       res.status(errorMessage.status).json({ message: errorMessage.message });

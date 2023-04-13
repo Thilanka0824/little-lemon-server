@@ -10,13 +10,17 @@ const mongoose = require("mongoose");
 
 mongoose
   .connect(process.env.MONGODB_URI, { dbName: "ecomm-context" })
-  .then(() => console.log("Connected to MongoDB"))
+  .then(() => console.log("Connected to ecommerce-backend on MongoDB"))
   .catch((err) => console.log(err));
 
 //routes
 var indexRouter = require("./routes/index");
+
+// why is this route users/users?
 var usersRouter = require("./routes/users/users");
+
 var cors = require("cors");
+// connection is an instance of MongoClient. require("mongodb") returns the same object as require("mongodb").MongoClient
 const { connected } = require("process");
 var app = express();
 
