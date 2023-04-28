@@ -4,7 +4,7 @@ const {
   createUser,
   hashPassword,
   comparePassword,
-  createJWTToken
+  createJWTToken,
 } = require("./userHelper");
 
 module.exports = {
@@ -29,7 +29,7 @@ module.exports = {
 
       res.status(200).json({
         message: "User created successfully",
-        userOBJ: savedUser,
+        userObj: savedUser,
       });
     } catch (error) {
       let errorMessage = await errorHandler(error);
@@ -49,11 +49,10 @@ module.exports = {
         };
       }
 
-
       //throw an error if the password from the request body in the front-end does not match the password from the database
       let checkedPassword = await comparePassword(
         req.body.password,
-        foundUser.password,
+        foundUser.password
       );
       if (!checkedPassword) {
         throw {
@@ -63,13 +62,13 @@ module.exports = {
       }
 
       //jwt
-      let token = await createJWTToken(foundUser)
+      let token = await createJWTToken(foundUser);
 
       console.log("foundUser", foundUser);
 
       res.status(200).json({
         message: "Post request from the Controller",
-        userOBJ: foundUser,
+        userObj: foundUser,
         token: token,
       });
     } catch (error) {
@@ -98,6 +97,24 @@ module.exports = {
     } catch (error) {
       let errorMessage = await errorHandler(error);
       res.status(errorMessage.status).json({ message: errorMessage.message });
+    }
+  },
+  authToken: async (req, res) => {
+    try {
+      let foundUser = await User.findById(req.decodedToken.id);
+      console.log(foundUser);
+      if (!foundUser) {
+        throw {
+          status: 404,
+          message: "USER DOES NOT EXIST!",
+        };
+      }
+
+      res.status(200).json(foundUser);
+      
+    } catch (error) {
+      let errorMessage = await errorHandler(error);
+      res.status(400).json({ message: errorMessage.message });
     }
   },
 };

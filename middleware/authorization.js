@@ -33,7 +33,7 @@ const verifyToken = async (req, res, next) => {
       };
     }
   } catch (error) {
-    res.status(403).json("Forbidden");
+    res.status(403).json("Invalid token");
   }
 };
 

@@ -15,9 +15,8 @@ mongoose
 
 //routes
 var indexRouter = require("./routes/index");
-
-// why is this route users/users?
 var usersRouter = require("./routes/users/users");
+var cartRouter = require("./routes/cart/cart"); // this is the route for the cart
 
 var cors = require("cors");
 // connection is an instance of MongoClient. require("mongodb") returns the same object as require("mongodb").MongoClient
@@ -42,6 +41,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api", indexRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/cart", cartRouter)  // this is the route for the cart
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
