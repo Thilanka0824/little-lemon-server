@@ -9,8 +9,8 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 
 mongoose
-  .connect(process.env.MONGODB_URI, { dbName: "ecomm-context" })
-  .then(() => console.log("Connected to ecommerce-backend on MongoDB"))
+  .connect(process.env.MONGODB_URI, { dbName: "little-lemon-db" })
+  .then(() => console.log("Connected to little-lemon-server on MongoDB"))
   .catch((err) => console.log(err));
 
 //routes
