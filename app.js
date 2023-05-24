@@ -8,6 +8,7 @@ require("dotenv").config();
 //Connect to MongoDB with mongoose
 const mongoose = require("mongoose");
 
+// this is the connection to the database
 mongoose
   .connect(process.env.MONGODB_URI, { dbName: "little-lemon-db" })
   .then(() => console.log("Connected to little-lemon-server on MongoDB"))
